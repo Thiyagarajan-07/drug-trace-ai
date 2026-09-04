@@ -3,3 +3,7 @@ uvicorn
 opencv-python-headless
 numpy
 python-multipart
+sqlalchemy
+psycopg2-binary
+passlib[bcrypt]
+pyjwt
