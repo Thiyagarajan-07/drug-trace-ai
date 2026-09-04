@@ -228,7 +228,7 @@ def export_csv(db: Session = Depends(get_db)):
         headers={"Content-Disposition": "attachment; filename=drug_trace_legal_audit_vault.csv"}
     )
 
-# --- 6. LUXURY TECH-FORWARD FRONTEND HUD (INTEGRATED & POLISHED) ---
+# --- 6. LUXURY TECH-FORWARD FRONTEND HUD (WITH AUTH MODES & WEB AUDIO SFX) ---
 @app.get("/", response_class=HTMLResponse)
 def serve_portal():
     return """
@@ -274,7 +274,6 @@ def serve_portal():
             .mono { font-family: 'JetBrains Mono', monospace; }
             .orbitron { font-family: 'Orbitron', sans-serif; }
 
-            /* Glassmorphic Cards & Panels with Luxury Depth */
             .glass-panel {
                 background: var(--bg-surface);
                 backdrop-filter: blur(28px);
@@ -291,7 +290,6 @@ def serve_portal():
                 transform: translateY(-2px);
             }
 
-            /* Telemetry Top Bar */
             .top-telemetry {
                 background: rgba(3, 4, 6, 0.92);
                 border-bottom: 1px solid var(--border-translucent);
@@ -322,7 +320,6 @@ def serve_portal():
 
             @keyframes softPulse { 0% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.3); } 100% { opacity: 0.4; transform: scale(0.9); } }
 
-            /* Elegant Navigation Bar */
             .navbar {
                 display: flex;
                 justify-content: space-between;
@@ -357,7 +354,6 @@ def serve_portal():
 
             .nav-link:hover { color: #fff; }
 
-            /* Striking Hero Section */
             #publicHero {
                 padding: 90px 24px 110px;
                 display: flex;
@@ -450,7 +446,6 @@ def serve_portal():
                 transform: translateY(-3px);
             }
 
-            /* Feature & Service Cards Grid */
             .features-container {
                 max-width: 1280px;
                 width: 100%;
@@ -491,7 +486,6 @@ def serve_portal():
                 line-height: 1.7;
             }
 
-            /* Authentication Modal Overlay */
             #authModal {
                 position: fixed;
                 inset: 0;
@@ -509,6 +503,35 @@ def serve_portal():
                 max-width: 460px;
                 padding: 48px;
                 border-radius: 22px;
+            }
+
+            .auth-mode-tabs {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 28px;
+                background: rgba(255, 255, 255, 0.03);
+                padding: 6px;
+                border-radius: 12px;
+                border: 1px solid var(--border-translucent);
+            }
+
+            .auth-mode-btn {
+                flex: 1;
+                background: transparent;
+                border: none;
+                color: var(--text-muted);
+                padding: 10px;
+                font-weight: 600;
+                font-size: 12px;
+                cursor: pointer;
+                border-radius: 8px;
+                transition: all 0.2s;
+            }
+
+            .auth-mode-btn.active {
+                background: var(--emerald);
+                color: #fff;
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
             }
 
             .form-input {
@@ -531,7 +554,6 @@ def serve_portal():
                 background: rgba(255, 255, 255, 0.06);
             }
 
-            /* App Dashboard Layout */
             #appLayout { display: none; flex-direction: column; min-height: 100vh; }
 
             header {
@@ -573,7 +595,6 @@ def serve_portal():
             .tab-content { display: none; }
             .tab-content.active { display: block; }
 
-            /* Metrics Grid */
             .metrics-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -584,7 +605,6 @@ def serve_portal():
             .metric-card { padding: 32px; }
             .metric-value { font-size: 42px; font-weight: 700; margin-top: 10px; letter-spacing: -0.5px; }
 
-            /* Reagent Scanner Drop Zone */
             .scanner-wrapper {
                 max-width: 740px;
                 margin: 0 auto;
@@ -608,14 +628,12 @@ def serve_portal():
                 background: rgba(16, 185, 129, 0.03);
             }
 
-            /* Tables & Data Vault */
             .table-container { padding: 36px; overflow-x: auto; }
             table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
             th { background: rgba(0, 0, 0, 0.45); color: var(--text-muted); padding: 16px 20px; border-bottom: 1px solid var(--border-translucent); font-weight: 600; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
             td { padding: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); color: #e5e7eb; }
             tr:hover td { background: rgba(255, 255, 255, 0.02); }
 
-            /* Refined Footer Design */
             footer {
                 border-top: 1px solid var(--border-translucent);
                 padding: 56px;
@@ -649,13 +667,13 @@ def serve_portal():
 
         <!-- PUBLIC LANDING NAVIGATION -->
         <nav class="navbar">
-            <div class="brand-logo" onclick="location.reload()">
+            <div class="brand-logo" onclick="playSound('click'); location.reload()">
                 <div style="font-size:26px; color:var(--emerald);">🛡️</div>
                 <div class="orbitron" style="font-size:16px; font-weight:700; color:#fff; letter-spacing:0.5px;">DRUG-TRACE AI</div>
             </div>
             <div class="nav-links">
-                <a class="nav-link" onclick="openAuthModal()">Officer Access</a>
-                <button onclick="enableDemoMode()" class="btn-primary" style="padding:10px 22px; font-size:13px;">Evaluator Portal</button>
+                <a class="nav-link" onclick="playSound('click'); openAuthModal('login')">Officer Access</a>
+                <button onclick="playSound('click'); enableDemoMode()" class="btn-primary" style="padding:10px 22px; font-size:13px;">Evaluator Portal</button>
             </div>
         </nav>
 
@@ -669,8 +687,8 @@ def serve_portal():
                 Empowering law enforcement professionals with high-precision OpenCV spectral matrix mapping, real-time geolocation timestamping, and immutable cryptographic evidence vaults.
             </p>
             <div class="cta-group">
-                <button onclick="openAuthModal()" class="btn-primary">⚡ Officer Authentication</button>
-                <button onclick="enableDemoMode()" class="btn-secondary">Explore Evaluator Portal</button>
+                <button onclick="playSound('click'); openAuthModal('login')" class="btn-primary">⚡ Officer Authentication</button>
+                <button onclick="playSound('click'); enableDemoMode()" class="btn-secondary">Explore Evaluator Portal</button>
             </div>
 
             <!-- FEATURE CARDS -->
@@ -693,29 +711,37 @@ def serve_portal():
             </div>
         </div>
 
-        <!-- OFFICER AUTHENTICATION MODAL -->
+        <!-- OFFICER AUTHENTICATION & REGISTRATION MODAL -->
         <div id="authModal">
             <div class="auth-box glass-panel">
-                <div style="text-align:center; margin-bottom:36px;">
-                    <h2 class="orbitron" style="font-size:22px; font-weight:700; color:#fff; margin-bottom:8px;">OFFICER LOGIN</h2>
+                <div style="text-align:center; margin-bottom:24px;">
+                    <h2 class="orbitron" id="authTitle" style="font-size:22px; font-weight:700; color:#fff; margin-bottom:8px;">OFFICER LOGIN</h2>
                     <p style="font-size:12px; color:var(--text-muted);" class="mono">SECURE FIELD OPERATIVE PORTAL</p>
+                </div>
+
+                <!-- Mode switcher tabs -->
+                <div class="auth-mode-tabs">
+                    <button class="auth-mode-btn active" id="tabLoginBtn" onclick="playSound('click'); switchAuthMode('login')">Sign In</button>
+                    <button class="auth-mode-btn" id="tabRegBtn" onclick="playSound('click'); switchAuthMode('register')">Register New Officer</button>
                 </div>
 
                 <form id="authForm" onsubmit="handleAuthSubmit(event)">
                     <label style="font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.5px;">USERNAME</label>
                     <input type="text" id="usernameInput" class="form-input mono" placeholder="officer_agent" required>
 
-                    <label style="font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.5px;">BADGE NUMBER</label>
-                    <input type="text" id="badgeInput" class="form-input mono" value="IND-POLICE-8042" required>
+                    <div id="badgeGroup" style="display:none;">
+                        <label style="font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.5px;">BADGE NUMBER</label>
+                        <input type="text" id="badgeRegisterInput" class="form-input mono" placeholder="IND-POLICE-XXXX">
+                    </div>
 
                     <label style="font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.5px;">SECURITY ACCESS KEY</label>
                     <input type="password" id="passwordInput" class="form-input" placeholder="••••••••" required>
 
-                    <button type="submit" class="btn-primary" style="width:100%; margin-top:10px;">Verify & Initialize Session</button>
+                    <button type="submit" id="authSubmitBtn" class="btn-primary" style="width:100%; margin-top:10px;">Verify & Initialize Session</button>
                 </form>
 
                 <div style="text-align:center; margin-top:28px;">
-                    <button onclick="closeAuthModal()" style="background:none; border:none; color:var(--text-muted); font-size:12px; cursor:pointer;">← Return to Main Portal</button>
+                    <button onclick="playSound('click'); closeAuthModal()" style="background:none; border:none; color:var(--text-muted); font-size:12px; cursor:pointer;">← Return to Main Portal</button>
                 </div>
             </div>
         </div>
@@ -727,20 +753,20 @@ def serve_portal():
                     <div style="font-size:24px; color:var(--emerald);">🛡️</div>
                     <div>
                         <div class="orbitron" style="font-size:16px; font-weight:700; color:#fff; letter-spacing:0.5px;">DRUG-TRACE AI</div>
-                        <div style="font-size:11px; color:var(--text-muted);" class="mono">FORENSIC HUD v4.2</div>
+                        <div style="font-size:11px; color:var(--text-muted);" class="mono">FORENSIC HUD v4.3</div>
                     </div>
                 </div>
                 <div style="display:flex; align-items:center; gap:18px;">
                     <span class="mono" id="headerBadgeTag" style="font-size:12px; padding:6px 16px; background:rgba(255,255,255,0.05); border:1px solid var(--border-translucent); border-radius:10px; color:var(--emerald);">BADGE: IND-POLICE-8042</span>
-                    <button onclick="lockSystem()" class="btn-secondary" style="padding:9px 18px; font-size:12px; border-color:rgba(239,68,68,0.3); color:#ef4444;">Lock HUD</button>
+                    <button onclick="playSound('click'); lockSystem()" class="btn-secondary" style="padding:9px 18px; font-size:12px; border-color:rgba(239,68,68,0.3); color:#ef4444;">Lock HUD</button>
                 </div>
             </header>
 
             <div class="nav-tabs-bar">
-                <button class="tab-btn active" onclick="switchTab('overview')">📊 Telemetry Dashboard</button>
-                <button class="tab-btn" onclick="switchTab('scanner')">🧪 Chemical Reagent Scanner</button>
-                <button class="tab-btn" onclick="switchTab('logs')">📑 Evidence Audit Vault</button>
-                <button class="tab-btn" onclick="switchTab('sih')">⚙️ System Architecture</button>
+                <button class="tab-btn active" onclick="playSound('click'); switchTab('overview')">📊 Telemetry Dashboard</button>
+                <button class="tab-btn" onclick="playSound('click'); switchTab('scanner')">🧪 Chemical Reagent Scanner</button>
+                <button class="tab-btn" onclick="playSound('click'); switchTab('logs')">📑 Evidence Audit Vault</button>
+                <button class="tab-btn" onclick="playSound('click'); switchTab('sih')">⚙️ System Architecture</button>
             </div>
 
             <main>
@@ -768,7 +794,7 @@ def serve_portal():
                     <div class="glass-panel" style="padding:56px; text-align:center;">
                         <h2 class="orbitron" style="font-size:24px; margin-bottom:14px; color:#fff;">READY FOR FIELD REAGENT ANALYSIS</h2>
                         <p style="color:var(--text-muted); max-width:660px; margin:0 auto 36px; font-size:15px; line-height:1.75;">Upload or capture chemical spot-test strip photographs to evaluate OpenCV HSV color matrix channels and securely sign evidence logs.</p>
-                        <button onclick="switchTab('scanner')" class="btn-primary">Initialize Camera Scanner →</button>
+                        <button onclick="playSound('click'); switchTab('scanner')" class="btn-primary">Initialize Camera Scanner →</button>
                     </div>
                 </div>
 
@@ -781,7 +807,7 @@ def serve_portal():
                         </div>
 
                         <form id="scannerForm">
-                            <div class="dropzone" onclick="document.getElementById('fileInput').click()">
+                            <div class="dropzone" onclick="playSound('click'); document.getElementById('fileInput').click()">
                                 <div style="font-size:52px; margin-bottom:16px;">📷</div>
                                 <div style="font-weight:600; font-size:15px; color:#fff;" id="uploadNotice">Tap to Capture or Upload Strip Photo</div>
                                 <div style="font-size:11px; color:var(--text-muted); margin-top:8px;" class="mono">SUPPORTED FORMATS: PNG, JPG, WEBP</div>
@@ -800,7 +826,7 @@ def serve_portal():
                     <div class="glass-panel table-container">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:28px;">
                             <h3 class="orbitron" style="font-size:17px; color:#fff;">EVIDENCE AUDIT VAULT</h3>
-                            <a href="/export-csv" class="btn-primary" style="text-decoration:none; padding:11px 22px; font-size:12px; background:linear-gradient(135deg,#059669,#047857);">📥 Export Legal CSV Report</a>
+                            <a href="/export-csv" onclick="playSound('click')" class="btn-primary" style="text-decoration:none; padding:11px 22px; font-size:12px; background:linear-gradient(135deg,#059669,#047857);">📥 Export Legal CSV Report</a>
                         </div>
                         <table>
                             <thead>
@@ -844,6 +870,48 @@ def serve_portal():
         <script>
             let activeBadge = "IND-POLICE-8042";
             let currentGps = "13.08270° N, 80.27070° E (Chennai Fix)";
+            let currentAuthMode = "login";
+
+            // Web Audio API Synthesizer for UI Sound Effects
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            function playSound(type) {
+                try {
+                    if (!audioCtx) return;
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    const now = audioCtx.currentTime;
+                    if (type === 'click') {
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(800, now);
+                        osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
+                        gain.gain.setValueAtTime(0.04, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                        osc.start(now);
+                        osc.stop(now + 0.04);
+                    } else if (type === 'success') {
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(523.25, now);
+                        osc.frequency.setValueAtTime(659.25, now + 0.08);
+                        osc.frequency.setValueAtTime(783.99, now + 0.16);
+                        gain.gain.setValueAtTime(0.07, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                        osc.start(now);
+                        osc.stop(now + 0.3);
+                    } else if (type === 'error') {
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(150, now);
+                        osc.frequency.setValueAtTime(100, now + 0.15);
+                        gain.gain.setValueAtTime(0.08, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                        osc.start(now);
+                        osc.stop(now + 0.3);
+                    }
+                } catch(e) { console.error('Audio playback error', e); }
+            }
 
             // Real-time IST Clock update
             function updateClock() {
@@ -863,15 +931,46 @@ def serve_portal():
                 if(tabId === 'logs') fetchAuditLogs();
             }
 
-            function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+            function openAuthModal(mode = 'login') {
+                switchAuthMode(mode);
+                document.getElementById('authModal').style.display = 'flex';
+            }
             function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+            
+            function switchAuthMode(mode) {
+                currentAuthMode = mode;
+                const title = document.getElementById('authTitle');
+                const badgeGroup = document.getElementById('badgeGroup');
+                const submitBtn = document.getElementById('authSubmitBtn');
+                const loginBtn = document.getElementById('tabLoginBtn');
+                const regBtn = document.getElementById('tabRegBtn');
+
+                if (mode === 'register') {
+                    title.innerText = "REGISTER NEW OFFICER";
+                    badgeGroup.style.display = "block";
+                    document.getElementById('badgeRegisterInput').required = true;
+                    submitBtn.innerText = "Register & Generate Credentials";
+                    loginBtn.classList.remove('active');
+                    regBtn.classList.add('active');
+                } else {
+                    title.innerText = "OFFICER LOGIN";
+                    badgeGroup.style.display = "none";
+                    document.getElementById('badgeRegisterInput').required = false;
+                    submitBtn.innerText = "Verify & Initialize Session";
+                    regBtn.classList.remove('active');
+                    loginBtn.classList.add('active');
+                }
+            }
+
             function enableDemoMode() {
+                playSound('success');
                 document.getElementById('publicHero').style.display = 'none';
                 document.querySelector('.navbar').style.display = 'none';
                 document.getElementById('appLayout').style.display = 'flex';
                 fetchAuditLogs();
             }
             function lockSystem() {
+                playSound('click');
                 document.getElementById('appLayout').style.display = 'none';
                 document.querySelector('.navbar').style.display = 'flex';
                 document.getElementById('publicHero').style.display = 'flex';
@@ -880,34 +979,58 @@ def serve_portal():
             async function handleAuthSubmit(e) {
                 e.preventDefault();
                 const username = document.getElementById('usernameInput').value;
-                const badge = document.getElementById('badgeInput').value;
                 const password = document.getElementById('passwordInput').value;
 
                 const formData = new FormData();
                 formData.append('username', username);
                 formData.append('password', password);
 
-                try {
-                    const res = await fetch('/login', { method: 'POST', body: formData });
-                    const data = await res.json();
-                    if(data.status === 'success') {
-                        activeBadge = data.badge_id;
-                        document.getElementById('headerBadgeTag').innerText = `BADGE: ${activeBadge}`;
-                        closeAuthModal();
-                        document.getElementById('publicHero').style.display = 'none';
-                        document.querySelector('.navbar').style.display = 'none';
-                        document.getElementById('appLayout').style.display = 'flex';
-                        fetchAuditLogs();
-                    } else {
-                        alert(data.message || 'Authentication failed');
+                if (currentAuthMode === 'register') {
+                    const badge = document.getElementById('badgeRegisterInput').value;
+                    formData.append('badge_number', badge);
+
+                    try {
+                        const res = await fetch('/register', { method: 'POST', body: formData });
+                        const data = await res.json();
+                        if (data.status === 'success') {
+                            playSound('success');
+                            alert(data.message);
+                            switchAuthMode('login');
+                        } else {
+                            playSound('error');
+                            alert(data.message || 'Registration failed');
+                        }
+                    } catch(err) {
+                        playSound('error');
+                        alert('Server connection error during registration.');
                     }
-                } catch(err) {
-                    alert('Server connection error during authentication.');
+                } else {
+                    try {
+                        const res = await fetch('/login', { method: 'POST', body: formData });
+                        const data = await res.json();
+                        if (data.status === 'success') {
+                            playSound('success');
+                            activeBadge = data.badge_id;
+                            document.getElementById('headerBadgeTag').innerText = `BADGE: ${activeBadge}`;
+                            closeAuthModal();
+                            document.getElementById('publicHero').style.display = 'none';
+                            document.querySelector('.navbar').style.display = 'none';
+                            document.getElementById('appLayout').style.display = 'flex';
+                            fetchAuditLogs();
+                        } else {
+                            playSound('error');
+                            alert(data.message || 'Authentication failed');
+                        }
+                    } catch(err) {
+                        playSound('error');
+                        alert('Server connection error during authentication.');
+                    }
                 }
             }
 
             function handleFileSelect(input) {
                 if(input.files && input.files[0]) {
+                    playSound('click');
                     document.getElementById('uploadNotice').innerText = `Selected: ${input.files[0].name}`;
                 }
             }
@@ -916,6 +1039,7 @@ def serve_portal():
                 e.preventDefault();
                 const fileInput = document.getElementById('fileInput');
                 if(!fileInput.files[0]) {
+                    playSound('error');
                     alert('Please select or capture a reagent test strip image first.');
                     return;
                 }
@@ -935,6 +1059,8 @@ def serve_portal():
 
                     if(result.status === 'success') {
                         const isPos = result.classification === 'POSITIVE';
+                        if (isPos) { playSound('error'); } else { playSound('success'); }
+                        
                         resCard.innerHTML = `
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
                                 <div class="orbitron" style="font-weight:700; color:${isPos ? 'var(--danger)' : 'var(--emerald)'};">RESULT: ${result.classification}</div>
@@ -951,6 +1077,7 @@ def serve_portal():
                         fetchAuditLogs();
                     }
                 } catch(err) {
+                    playSound('error');
                     resCard.innerHTML = `<div style="color:var(--danger); text-align:center;">Analysis execution failed. Please retry.</div>`;
                 }
             });
