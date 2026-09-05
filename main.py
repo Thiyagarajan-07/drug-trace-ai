@@ -228,7 +228,7 @@ def export_csv(db: Session = Depends(get_db)):
         headers={"Content-Disposition": "attachment; filename=drug_trace_legal_audit_vault.csv"}
     )
 
-# --- 6. LUXURY TECH-FORWARD FRONTEND HUD (WITH AUTH MODES & WEB AUDIO SFX) ---
+# --- 6. LUXURY TECH-FORWARD FRONTEND HUD WITH LIVE CANVAS BACKGROUND & DUAL REFERENCE CARD ---
 @app.get("/", response_class=HTMLResponse)
 def serve_portal():
     return """
@@ -244,54 +244,62 @@ def serve_portal():
         
         <style>
             :root {
-                --bg-obsidian: #030406;
-                --bg-surface: rgba(12, 14, 20, 0.82);
+                --bg-midnight: #0B1020;
+                --royal-purple: #21164A;
+                --electric-violet: #7C3AED;
+                --cyan-accent: #22D3EE;
+                --magenta-accent: #EC4899;
+                --soft-white: #F8FAFC;
+                --cool-slate: #A7B0C0;
                 --border-translucent: rgba(255, 255, 255, 0.08);
-                --border-active: rgba(16, 185, 129, 0.45);
-                --emerald: #10b981;
-                --emerald-glow: rgba(16, 185, 129, 0.25);
-                --amber: #f59e0b;
-                --cyan-accent: #06b6d4;
-                --text-main: #f9fafb;
-                --text-muted: #9ca3af;
-                --danger: #ef4444;
+                --danger: #EF4444;
+                --emerald: #10B981;
             }
 
             * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
             
             body {
-                background: var(--bg-obsidian);
-                color: var(--text-main);
+                background: var(--bg-midnight);
+                color: var(--soft-white);
                 min-height: 100vh;
                 display: flex;
                 flex-direction: column;
                 overflow-x: hidden;
-                background-image: 
-                    radial-gradient(circle at 50% -12%, rgba(16, 185, 129, 0.15) 0%, transparent 48%),
-                    radial-gradient(circle at 100% 92%, rgba(6, 182, 212, 0.1) 0%, transparent 42%);
+                position: relative;
+            }
+
+            /* Interactive Live Background Canvas */
+            #liveBackgroundCanvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: -1;
+                pointer-events: none;
             }
 
             .mono { font-family: 'JetBrains Mono', monospace; }
             .orbitron { font-family: 'Orbitron', sans-serif; }
 
             .glass-panel {
-                background: var(--bg-surface);
-                backdrop-filter: blur(28px);
-                -webkit-backdrop-filter: blur(28px);
+                background: rgba(11, 16, 32, 0.75);
+                backdrop-filter: blur(24px);
+                -webkit-backdrop-filter: blur(24px);
                 border: 1px solid var(--border-translucent);
-                border-radius: 18px;
-                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+                border-radius: 20px;
+                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
                 transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
 
             .glass-panel:hover {
-                border-color: rgba(255, 255, 255, 0.18);
-                box-shadow: 0 36px 72px rgba(0, 0, 0, 0.7);
+                border-color: rgba(34, 211, 238, 0.3);
+                box-shadow: 0 36px 72px rgba(124, 58, 237, 0.15);
                 transform: translateY(-2px);
             }
 
             .top-telemetry {
-                background: rgba(3, 4, 6, 0.92);
+                background: rgba(11, 16, 32, 0.92);
                 border-bottom: 1px solid var(--border-translucent);
                 padding: 12px 48px;
                 display: flex;
@@ -299,22 +307,23 @@ def serve_portal():
                 align-items: center;
                 font-size: 11px;
                 letter-spacing: 0.9px;
+                z-index: 10;
             }
 
             .status-indicator {
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                color: var(--emerald);
+                color: var(--cyan-accent);
                 font-weight: 600;
             }
 
             .pulse-dot {
                 width: 7px;
                 height: 7px;
-                background: var(--emerald);
+                background: var(--cyan-accent);
                 border-radius: 50%;
-                box-shadow: 0 0 12px var(--emerald);
+                box-shadow: 0 0 12px var(--cyan-accent);
                 animation: softPulse 2s infinite ease-in-out;
             }
 
@@ -326,8 +335,9 @@ def serve_portal():
                 align-items: center;
                 padding: 24px 56px;
                 border-bottom: 1px solid var(--border-translucent);
-                background: rgba(12, 14, 20, 0.6);
+                background: rgba(11, 16, 32, 0.5);
                 backdrop-filter: blur(16px);
+                z-index: 10;
             }
 
             .brand-logo {
@@ -344,7 +354,7 @@ def serve_portal():
             }
 
             .nav-link {
-                color: var(--text-muted);
+                color: var(--cool-slate);
                 text-decoration: none;
                 font-size: 13px;
                 font-weight: 500;
@@ -352,7 +362,7 @@ def serve_portal():
                 cursor: pointer;
             }
 
-            .nav-link:hover { color: #fff; }
+            .nav-link:hover { color: var(--soft-white); }
 
             #publicHero {
                 padding: 90px 24px 110px;
@@ -361,6 +371,7 @@ def serve_portal():
                 align-items: center;
                 text-align: center;
                 position: relative;
+                z-index: 2;
             }
 
             .badge-pill {
@@ -368,16 +379,16 @@ def serve_portal():
                 align-items: center;
                 gap: 8px;
                 padding: 8px 20px;
-                background: rgba(16, 185, 129, 0.1);
-                border: 1px solid rgba(16, 185, 129, 0.35);
+                background: rgba(124, 58, 237, 0.15);
+                border: 1px solid rgba(124, 58, 237, 0.4);
                 border-radius: 30px;
-                color: var(--emerald);
+                color: var(--cyan-accent);
                 font-size: 11px;
                 font-weight: 600;
                 letter-spacing: 2px;
                 text-transform: uppercase;
                 margin-bottom: 32px;
-                box-shadow: 0 0 25px rgba(16, 185, 129, 0.12);
+                box-shadow: 0 0 25px rgba(124, 58, 237, 0.2);
             }
 
             .hero-heading {
@@ -387,14 +398,14 @@ def serve_portal():
                 line-height: 1.06;
                 margin-bottom: 24px;
                 max-width: 980px;
-                background: linear-gradient(135deg, #ffffff 30%, var(--text-muted) 100%);
+                background: linear-gradient(135deg, #ffffff 30%, var(--cool-slate) 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
 
             .hero-description {
                 font-size: 18px;
-                color: var(--text-muted);
+                color: var(--cool-slate);
                 max-width: 720px;
                 line-height: 1.8;
                 margin-bottom: 48px;
@@ -410,14 +421,14 @@ def serve_portal():
             }
 
             .btn-primary {
-                background: linear-gradient(135deg, #10b981 0%, #047857 100%);
-                color: #ffffff;
+                background: linear-gradient(135deg, var(--electric-violet) 0%, var(--cyan-accent) 100%);
+                color: var(--soft-white);
                 font-weight: 600;
                 padding: 16px 36px;
                 border-radius: 12px;
                 border: none;
                 cursor: pointer;
-                box-shadow: 0 10px 28px rgba(16, 185, 129, 0.35);
+                box-shadow: 0 10px 28px rgba(124, 58, 237, 0.35);
                 transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
                 font-size: 14px;
                 letter-spacing: 0.5px;
@@ -425,12 +436,12 @@ def serve_portal():
 
             .btn-primary:hover {
                 transform: translateY(-3px);
-                box-shadow: 0 14px 36px rgba(16, 185, 129, 0.5);
+                box-shadow: 0 14px 36px rgba(34, 211, 238, 0.4);
             }
 
             .btn-secondary {
                 background: rgba(255, 255, 255, 0.04);
-                color: var(--text-main);
+                color: var(--soft-white);
                 font-weight: 600;
                 padding: 16px 36px;
                 border-radius: 12px;
@@ -442,7 +453,7 @@ def serve_portal():
 
             .btn-secondary:hover {
                 background: rgba(255, 255, 255, 0.08);
-                border-color: rgba(255, 255, 255, 0.22);
+                border-color: rgba(34, 211, 238, 0.3);
                 transform: translateY(-3px);
             }
 
@@ -467,9 +478,9 @@ def serve_portal():
                 margin-bottom: 22px;
                 display: inline-block;
                 padding: 16px;
-                background: rgba(16, 185, 129, 0.1);
+                background: rgba(124, 58, 237, 0.15);
                 border-radius: 14px;
-                border: 1px solid rgba(16, 185, 129, 0.25);
+                border: 1px solid rgba(124, 58, 237, 0.3);
             }
 
             .feature-title {
@@ -482,14 +493,156 @@ def serve_portal():
 
             .feature-desc {
                 font-size: 14px;
-                color: var(--text-muted);
+                color: var(--cool-slate);
                 line-height: 1.7;
+            }
+
+            /* Smart India Hackathon dual reference cards */
+            .dual-reference-grid {
+                max-width: 1280px;
+                width: 100%;
+                margin: 66px auto 0;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 28px;
+                padding: 0 24px;
+                text-align: left;
+            }
+
+            .reference-kicker {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                margin-bottom: 24px;
+                color: var(--cool-slate);
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 1.6px;
+                text-transform: uppercase;
+            }
+
+            .reference-index {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 36px;
+                height: 26px;
+                padding: 0 10px;
+                border: 1px solid rgba(34, 211, 238, 0.35);
+                border-radius: 999px;
+                color: var(--cyan-accent);
+                background: rgba(34, 211, 238, 0.08);
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 11px;
+            }
+
+            .ref-card {
+                min-height: 310px;
+                padding: 38px;
+                position: relative;
+                overflow: hidden;
+                border-top: 1px solid rgba(255, 255, 255, 0.12);
+                border-left: 4px solid var(--cyan-accent);
+            }
+
+            .ref-card::after {
+                content: '';
+                position: absolute;
+                width: 180px;
+                height: 180px;
+                right: -70px;
+                bottom: -90px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(34, 211, 238, 0.22), transparent 68%);
+                pointer-events: none;
+            }
+
+            .ref-card.secondary-ref {
+                border-left-color: var(--magenta-accent);
+            }
+
+            .ref-card.secondary-ref::after {
+                background: radial-gradient(circle, rgba(236, 72, 153, 0.22), transparent 68%);
+            }
+
+            .ref-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 52px;
+                height: 52px;
+                margin-bottom: 22px;
+                border: 1px solid rgba(34, 211, 238, 0.35);
+                border-radius: 15px;
+                background: rgba(34, 211, 238, 0.1);
+                color: var(--cyan-accent);
+                font-size: 24px;
+                box-shadow: 0 0 26px rgba(34, 211, 238, 0.12);
+            }
+
+            .secondary-ref .ref-icon {
+                border-color: rgba(236, 72, 153, 0.4);
+                background: rgba(236, 72, 153, 0.1);
+                color: var(--magenta-accent);
+                box-shadow: 0 0 26px rgba(236, 72, 153, 0.12);
+            }
+
+            .ref-card h3 {
+                margin-bottom: 14px;
+                color: #fff;
+                font-size: 19px;
+                line-height: 1.35;
+            }
+
+            .ref-card p {
+                color: var(--cool-slate);
+                font-size: 14px;
+                line-height: 1.75;
+            }
+
+            .ref-points {
+                display: grid;
+                gap: 10px;
+                margin-top: 22px;
+                color: #dbeafe;
+                font-size: 12px;
+                line-height: 1.5;
+            }
+
+            .ref-points span {
+                display: flex;
+                align-items: flex-start;
+                gap: 9px;
+            }
+
+            .ref-points span::before {
+                content: '✦';
+                flex: 0 0 auto;
+                color: var(--cyan-accent);
+            }
+
+            .secondary-ref .ref-points span::before {
+                color: var(--magenta-accent);
+            }
+
+            @media (max-width: 760px) {
+                .dual-reference-grid {
+                    grid-template-columns: 1fr;
+                    margin-top: 48px;
+                    padding: 0 16px;
+                }
+
+                .ref-card {
+                    min-height: 0;
+                    padding: 30px 26px;
+                }
             }
 
             #authModal {
                 position: fixed;
                 inset: 0;
-                background: rgba(3, 4, 6, 0.9);
+                background: rgba(11, 16, 32, 0.85);
                 backdrop-filter: blur(28px);
                 z-index: 9999;
                 display: none;
@@ -519,7 +672,7 @@ def serve_portal():
                 flex: 1;
                 background: transparent;
                 border: none;
-                color: var(--text-muted);
+                color: var(--cool-slate);
                 padding: 10px;
                 font-weight: 600;
                 font-size: 12px;
@@ -529,9 +682,9 @@ def serve_portal():
             }
 
             .auth-mode-btn.active {
-                background: var(--emerald);
+                background: var(--electric-violet);
                 color: #fff;
-                box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+                box-shadow: 0 0 15px rgba(124, 58, 237, 0.4);
             }
 
             .form-input {
@@ -549,15 +702,15 @@ def serve_portal():
 
             .form-input:focus {
                 outline: none;
-                border-color: var(--emerald);
-                box-shadow: 0 0 22px rgba(16, 185, 129, 0.18);
+                border-color: var(--cyan-accent);
+                box-shadow: 0 0 22px rgba(34, 211, 238, 0.2);
                 background: rgba(255, 255, 255, 0.06);
             }
 
-            #appLayout { display: none; flex-direction: column; min-height: 100vh; }
+            #appLayout { display: none; flex-direction: column; min-height: 100vh; z-index: 2; position: relative; }
 
             header {
-                background: rgba(12, 14, 20, 0.88);
+                background: rgba(11, 16, 32, 0.88);
                 border-bottom: 1px solid var(--border-translucent);
                 padding: 20px 56px;
                 display: flex;
@@ -568,7 +721,7 @@ def serve_portal():
             .nav-tabs-bar {
                 display: flex;
                 gap: 12px;
-                background: rgba(3, 4, 6, 0.92);
+                background: rgba(11, 16, 32, 0.92);
                 padding: 12px 56px;
                 border-bottom: 1px solid var(--border-translucent);
                 overflow-x: auto;
@@ -577,7 +730,7 @@ def serve_portal():
             .tab-btn {
                 background: transparent;
                 border: none;
-                color: var(--text-muted);
+                color: var(--cool-slate);
                 padding: 11px 22px;
                 font-weight: 500;
                 font-size: 13px;
@@ -588,7 +741,7 @@ def serve_portal():
             }
 
             .tab-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.04); }
-            .tab-btn.active { color: var(--emerald); background: rgba(16, 185, 129, 0.14); font-weight: 600; }
+            .tab-btn.active { color: var(--cyan-accent); background: rgba(34, 211, 238, 0.12); font-weight: 600; }
 
             main { flex: 1; padding: 52px; max-width: 1400px; margin: 0 auto; width: 100%; }
 
@@ -624,13 +777,13 @@ def serve_portal():
             }
 
             .dropzone:hover {
-                border-color: var(--emerald);
-                background: rgba(16, 185, 129, 0.03);
+                border-color: var(--cyan-accent);
+                background: rgba(34, 211, 238, 0.03);
             }
 
             .table-container { padding: 36px; overflow-x: auto; }
             table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
-            th { background: rgba(0, 0, 0, 0.45); color: var(--text-muted); padding: 16px 20px; border-bottom: 1px solid var(--border-translucent); font-weight: 600; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+            th { background: rgba(0, 0, 0, 0.45); color: var(--cool-slate); padding: 16px 20px; border-bottom: 1px solid var(--border-translucent); font-weight: 600; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
             td { padding: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); color: #e5e7eb; }
             tr:hover td { background: rgba(255, 255, 255, 0.02); }
 
@@ -638,17 +791,22 @@ def serve_portal():
                 border-top: 1px solid var(--border-translucent);
                 padding: 56px;
                 text-align: center;
-                color: var(--text-muted);
+                color: var(--cool-slate);
                 font-size: 13px;
-                background: rgba(3, 4, 6, 0.75);
+                background: rgba(11, 16, 32, 0.75);
                 display: flex;
                 flex-direction: column;
                 gap: 18px;
                 align-items: center;
+                z-index: 2;
+                position: relative;
             }
         </style>
     </head>
     <body>
+
+        <!-- INTERACTIVE LIVE BACKGROUND CANVAS -->
+        <canvas id="liveBackgroundCanvas"></canvas>
 
         <!-- TOP DIAGNOSTIC TELEMETRY BAR -->
         <div class="top-telemetry mono">
@@ -656,19 +814,19 @@ def serve_portal():
                 <div class="status-indicator">
                     <span class="pulse-dot"></span> SECURE PROTOCOL ACTIVE
                 </div>
-                <div>LATENCY: <span style="color:var(--emerald);">10ms</span></div>
-                <div>CIPHER: <span style="color:var(--cyan-accent);">SHA-256 / PBKDF2</span></div>
+                <div>LATENCY: <span style="color:var(--cyan-accent);">10ms</span></div>
+                <div>CIPHER: <span style="color:var(--magenta-accent);">SHA-256 / PBKDF2</span></div>
             </div>
             <div style="display:flex; gap:32px; align-items:center;">
                 <div>IST TIMESTAMP: <span id="clockIST" style="color:#fff;">--:--:--</span></div>
-                <div>GPS PRECISION: <span style="color:var(--emerald);">RTK LOCKED</span></div>
+                <div>GPS PRECISION: <span style="color:var(--cyan-accent);">RTK LOCKED</span></div>
             </div>
         </div>
 
         <!-- PUBLIC LANDING NAVIGATION -->
         <nav class="navbar">
             <div class="brand-logo" onclick="playSound('click'); location.reload()">
-                <div style="font-size:26px; color:var(--emerald);">🛡️</div>
+                <div style="font-size:26px; color:var(--cyan-accent);">🛡️</div>
                 <div class="orbitron" style="font-size:16px; font-weight:700; color:#fff; letter-spacing:0.5px;">DRUG-TRACE AI</div>
             </div>
             <div class="nav-links">
@@ -709,6 +867,42 @@ def serve_portal():
                     <p class="feature-desc">Export certified audit logs directly to CSV reports designed for airtight court presentation and chain-of-custody tracking.</p>
                 </div>
             </div>
+
+                        <!-- SMART INDIA HACKATHON 231: DUAL REFERENCE CARDS -->
+            <div class="dual-reference-grid" aria-label="Smart India Hackathon problem-solution references">
+                <article class="glass-panel ref-card">
+                    <div class="reference-kicker">
+                        <span>SIH 231 · Reference 01</span>
+                        <span class="reference-index">01</span>
+                    </div>
+                    <div class="ref-icon" aria-hidden="true">⚡</div>
+                    <h3 class="orbitron">Problem Statement Lens</h3>
+                    <p>
+                        Field teams need a rapid, dependable way to screen suspected narcotic samples before a laboratory confirmation is available. The experience must work in demanding locations, reduce interpretation errors, and preserve the context required for later review.
+                    </p>
+                    <div class="ref-points">
+                        <span>Fast preliminary colorimetric interpretation at the point of collection.</span>
+                        <span>Clear operator feedback designed for non-laboratory field conditions.</span>
+                    </div>
+                </article>
+
+                <article class="glass-panel ref-card secondary-ref">
+                    <div class="reference-kicker">
+                        <span>SIH 231 · Reference 02</span>
+                        <span class="reference-index" style="border-color:rgba(236,72,153,.4); color:var(--magenta-accent); background:rgba(236,72,153,.08);">02</span>
+                    </div>
+                    <div class="ref-icon" aria-hidden="true">🛡️</div>
+                    <h3 class="orbitron">Proposed Solution Lens</h3>
+                    <p>
+                        DRUG-TRACE AI combines OpenCV-based HSV analysis with geolocation, IST timestamping, officer identity, and a SHA-256 evidence seal to create a transparent digital trail for every field test.
+                    </p>
+                    <div class="ref-points">
+                        <span>Edge-first analysis keeps the workflow responsive and practical.</span>
+                        <span>Immutable audit records support chain-of-custody and judicial review.</span>
+                    </div>
+                </article>
+            </div>
+
         </div>
 
         <!-- OFFICER AUTHENTICATION & REGISTRATION MODAL -->
@@ -716,7 +910,7 @@ def serve_portal():
             <div class="auth-box glass-panel">
                 <div style="text-align:center; margin-bottom:24px;">
                     <h2 class="orbitron" id="authTitle" style="font-size:22px; font-weight:700; color:#fff; margin-bottom:8px;">OFFICER LOGIN</h2>
-                    <p style="font-size:12px; color:var(--text-muted);" class="mono">SECURE FIELD OPERATIVE PORTAL</p>
+                    <p style="font-size:12px; color:var(--cool-slate);" class="mono">SECURE FIELD OPERATIVE PORTAL</p>
                 </div>
 
                 <!-- Mode switcher tabs -->
@@ -726,22 +920,22 @@ def serve_portal():
                 </div>
 
                 <form id="authForm" onsubmit="handleAuthSubmit(event)">
-                    <label style="font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.5px;">USERNAME</label>
+                    <label style="font-size:11px; font-weight:600; color:var(--cool-slate); letter-spacing:0.5px;">USERNAME</label>
                     <input type="text" id="usernameInput" class="form-input mono" placeholder="officer_agent" required>
 
                     <div id="badgeGroup" style="display:none;">
-                        <label style="font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.5px;">BADGE NUMBER</label>
+                        <label style="font-size:11px; font-weight:600; color:var(--cool-slate); letter-spacing:0.5px;">BADGE NUMBER</label>
                         <input type="text" id="badgeRegisterInput" class="form-input mono" placeholder="IND-POLICE-XXXX">
                     </div>
 
-                    <label style="font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.5px;">SECURITY ACCESS KEY</label>
+                    <label style="font-size:11px; font-weight:600; color:var(--cool-slate); letter-spacing:0.5px;">SECURITY ACCESS KEY</label>
                     <input type="password" id="passwordInput" class="form-input" placeholder="••••••••" required>
 
                     <button type="submit" id="authSubmitBtn" class="btn-primary" style="width:100%; margin-top:10px;">Verify & Initialize Session</button>
                 </form>
 
                 <div style="text-align:center; margin-top:28px;">
-                    <button onclick="playSound('click'); closeAuthModal()" style="background:none; border:none; color:var(--text-muted); font-size:12px; cursor:pointer;">← Return to Main Portal</button>
+                    <button onclick="playSound('click'); closeAuthModal()" style="background:none; border:none; color:var(--cool-slate); font-size:12px; cursor:pointer;">← Return to Main Portal</button>
                 </div>
             </div>
         </div>
@@ -750,14 +944,14 @@ def serve_portal():
         <div id="appLayout">
             <header>
                 <div style="display:flex; align-items:center; gap:16px;">
-                    <div style="font-size:24px; color:var(--emerald);">🛡️</div>
+                    <div style="font-size:24px; color:var(--cyan-accent);">🛡️</div>
                     <div>
                         <div class="orbitron" style="font-size:16px; font-weight:700; color:#fff; letter-spacing:0.5px;">DRUG-TRACE AI</div>
-                        <div style="font-size:11px; color:var(--text-muted);" class="mono">FORENSIC HUD v4.3</div>
+                        <div style="font-size:11px; color:var(--cool-slate);" class="mono">FORENSIC HUD v4.3</div>
                     </div>
                 </div>
                 <div style="display:flex; align-items:center; gap:18px;">
-                    <span class="mono" id="headerBadgeTag" style="font-size:12px; padding:6px 16px; background:rgba(255,255,255,0.05); border:1px solid var(--border-translucent); border-radius:10px; color:var(--emerald);">BADGE: IND-POLICE-8042</span>
+                    <span class="mono" id="headerBadgeTag" style="font-size:12px; padding:6px 16px; background:rgba(255,255,255,0.05); border:1px solid var(--border-translucent); border-radius:10px; color:var(--cyan-accent);">BADGE: IND-POLICE-8042</span>
                     <button onclick="playSound('click'); lockSystem()" class="btn-secondary" style="padding:9px 18px; font-size:12px; border-color:rgba(239,68,68,0.3); color:#ef4444;">Lock HUD</button>
                 </div>
             </header>
@@ -774,26 +968,26 @@ def serve_portal():
                 <div id="tab-overview" class="tab-content active">
                     <div class="metrics-grid">
                         <div class="metric-card glass-panel">
-                            <div style="font-size:12px; color:var(--text-muted); font-weight:500;">TOTAL FIELD EXECUTIONS</div>
+                            <div style="font-size:12px; color:var(--cool-slate); font-weight:500;">TOTAL FIELD EXECUTIONS</div>
                             <div class="metric-value mono" id="statTotal" style="color:#fff;">0</div>
                         </div>
                         <div class="metric-card glass-panel">
-                            <div style="font-size:12px; color:var(--text-muted); font-weight:500;">POSITIVE DETECTIONS</div>
+                            <div style="font-size:12px; color:var(--cool-slate); font-weight:500;">POSITIVE DETECTIONS</div>
                             <div class="metric-value mono" id="statPos" style="color:var(--danger);">0</div>
                         </div>
                         <div class="metric-card glass-panel">
-                            <div style="font-size:12px; color:var(--text-muted); font-weight:500;">NEGATIVE REAGENTS</div>
+                            <div style="font-size:12px; color:var(--cool-slate); font-weight:500;">NEGATIVE REAGENTS</div>
                             <div class="metric-value mono" id="statNeg" style="color:var(--emerald);">0</div>
                         </div>
                         <div class="metric-card glass-panel">
-                            <div style="font-size:12px; color:var(--text-muted); font-weight:500;">CHAIN-OF-CUSTODY INTEGRITY</div>
+                            <div style="font-size:12px; color:var(--cool-slate); font-weight:500;">CHAIN-OF-CUSTODY INTEGRITY</div>
                             <div class="metric-value mono" style="color:var(--cyan-accent);">100%</div>
                         </div>
                     </div>
 
                     <div class="glass-panel" style="padding:56px; text-align:center;">
                         <h2 class="orbitron" style="font-size:24px; margin-bottom:14px; color:#fff;">READY FOR FIELD REAGENT ANALYSIS</h2>
-                        <p style="color:var(--text-muted); max-width:660px; margin:0 auto 36px; font-size:15px; line-height:1.75;">Upload or capture chemical spot-test strip photographs to evaluate OpenCV HSV color matrix channels and securely sign evidence logs.</p>
+                        <p style="color:var(--cool-slate); max-width:660px; margin:0 auto 36px; font-size:15px; line-height:1.75;">Upload or capture chemical spot-test strip photographs to evaluate OpenCV HSV color matrix channels and securely sign evidence logs.</p>
                         <button onclick="playSound('click'); switchTab('scanner')" class="btn-primary">Initialize Camera Scanner →</button>
                     </div>
                 </div>
@@ -803,14 +997,14 @@ def serve_portal():
                     <div class="scanner-wrapper glass-panel">
                         <div style="text-align:center; margin-bottom:32px;">
                             <h2 class="orbitron" style="font-size:19px; color:#fff; margin-bottom:8px;">AI REAGENT ANALYZER</h2>
-                            <p style="color:var(--text-muted); font-size:12px;" class="mono">OPENCV HSV COLOR SPACE MATRIX SEGMENTATION</p>
+                            <p style="color:var(--cool-slate); font-size:12px;" class="mono">OPENCV HSV COLOR SPACE MATRIX SEGMENTATION</p>
                         </div>
 
                         <form id="scannerForm">
                             <div class="dropzone" onclick="playSound('click'); document.getElementById('fileInput').click()">
                                 <div style="font-size:52px; margin-bottom:16px;">📷</div>
                                 <div style="font-weight:600; font-size:15px; color:#fff;" id="uploadNotice">Tap to Capture or Upload Strip Photo</div>
-                                <div style="font-size:11px; color:var(--text-muted); margin-top:8px;" class="mono">SUPPORTED FORMATS: PNG, JPG, WEBP</div>
+                                <div style="font-size:11px; color:var(--cool-slate); margin-top:8px;" class="mono">SUPPORTED FORMATS: PNG, JPG, WEBP</div>
                                 <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none;" onchange="handleFileSelect(this)">
                             </div>
 
@@ -841,7 +1035,7 @@ def serve_portal():
                                 </tr>
                             </thead>
                             <tbody id="logsTableBody" class="mono">
-                                <tr><td colspan="7" style="text-align:center; color:var(--text-muted);">Querying secure database records...</td></tr>
+                                <tr><td colspan="7" style="text-align:center; color:var(--cool-slate);">Querying secure database records...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -851,7 +1045,7 @@ def serve_portal():
                 <div id="tab-sih" class="tab-content">
                     <div class="glass-panel" style="padding:48px;">
                         <h3 class="orbitron" style="font-size:19px; color:#fff; margin-bottom:24px;">TECHNICAL SPECIFICATIONS & PROTOCOLS</h3>
-                        <ul style="color:var(--text-muted); line-height:2.5; font-size:14px; padding-left:22px;" class="mono">
+                        <ul style="color:var(--cool-slate); line-height:2.5; font-size:14px; padding-left:22px;" class="mono">
                             <li><strong style="color:#fff;">Computer Vision Core:</strong> OpenCV HSV color range segmentation targeting chemical reagent reactions.</li>
                             <li><strong style="color:#fff;">Cryptographic Sealing:</strong> SHA-256 evidence hashing linking officer token, image payload, GPS location, and IST timestamp.</li>
                             <li><strong style="color:#fff;">Database Engine:</strong> Managed PostgreSQL with automatic local SQLite database fallback.</li>
@@ -863,7 +1057,7 @@ def serve_portal():
 
             <footer>
                 <div>DRUG-TRACE AI Forensic Computing Platform • Secured Evidence Vault & Chain of Custody System</div>
-                <div style="font-size:11px; color:var(--text-muted);" class="mono">MIL-SPEC SECURITY COMPLIANT • COURT-ADMISSIBLE AUDIT LOGGING</div>
+                <div style="font-size:11px; color:var(--cool-slate);" class="mono">MIL-SPEC SECURITY COMPLIANT • COURT-ADMISSIBLE AUDIT LOGGING</div>
             </footer>
         </div>
 
@@ -871,6 +1065,110 @@ def serve_portal():
             let activeBadge = "IND-POLICE-8042";
             let currentGps = "13.08270° N, 80.27070° E (Chennai Fix)";
             let currentAuthMode = "login";
+
+            // Interactive Live Background Canvas Engine
+            const canvas = document.getElementById('liveBackgroundCanvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+
+            function resizeCanvas() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.6;
+                    this.vy = (Math.random() - 0.5) * 0.6;
+                    this.radius = Math.random() * 2.2 + 1;
+                    this.color = Math.random() > 0.5 ? '#22D3EE' : '#7C3AED';
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Gentle cursor repulsion/attraction
+                    let dx = mouseX - this.x;
+                    let dy = mouseY - this.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        this.x -= dx * 0.01;
+                        this.y -= dy * 0.01;
+                    }
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animateBackground() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw gradient light fields
+                let grad1 = ctx.createRadialGradient(mouseX, mouseY, 50, mouseX, mouseY, 500);
+                grad1.addColorStop(0, 'rgba(124, 58, 237, 0.12)');
+                grad1.addColorStop(1, 'transparent');
+                ctx.fillStyle = grad1;
+                ctx.fillRect(0, 0, width, height);
+
+                let grad2 = ctx.createRadialGradient(width * 0.2, height * 0.3, 100, width * 0.2, height * 0.3, 600);
+                grad2.addColorStop(0, 'rgba(34, 211, 238, 0.08)');
+                grad2.addColorStop(1, 'transparent');
+                ctx.fillStyle = grad2;
+                ctx.fillRect(0, 0, width, height);
+
+                // Update and draw particles & connections
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+
+                    for (let j = i + 1; j < particles.length; j++) {
+                        let dx = particles[i].x - particles[j].x;
+                        let dy = particles[i].y - particles[j].y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 110) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(34, 211, 238, ${0.15 * (1 - dist / 110)})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animateBackground);
+            }
+
+            // Respect prefers-reduced-motion
+            const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+            if (!reducedMotionQuery.matches) {
+                animateBackground();
+            }
 
             // Web Audio API Synthesizer for UI Sound Effects
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1051,7 +1349,7 @@ def serve_portal():
 
                 const resCard = document.getElementById('resultCard');
                 resCard.style.display = 'block';
-                resCard.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:20px;" class="mono">Processing OpenCV spectral matrix analysis...</div>`;
+                resCard.innerHTML = `<div style="text-align:center; color:var(--cool-slate); padding:20px;" class="mono">Processing OpenCV spectral matrix analysis...</div>`;
 
                 try {
                     const response = await fetch('/analyze', { method: 'POST', body: formData });
@@ -1064,9 +1362,9 @@ def serve_portal():
                         resCard.innerHTML = `
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
                                 <div class="orbitron" style="font-weight:700; color:${isPos ? 'var(--danger)' : 'var(--emerald)'};">RESULT: ${result.classification}</div>
-                                <div class="mono" style="font-size:12px; color:var(--text-muted);">HUE SCORE: ${result.hue_score}</div>
+                                <div class="mono" style="font-size:12px; color:var(--cool-slate);">HUE SCORE: ${result.hue_score}</div>
                             </div>
-                            <div style="font-size:12px; color:var(--text-muted); line-height:1.8;" class="mono">
+                            <div style="font-size:12px; color:var(--cool-slate); line-height:1.8;" class="mono">
                                 <div><strong>Badge ID:</strong> ${result.badge_id}</div>
                                 <div><strong>Biometric Hash:</strong> ${result.fingerprint}</div>
                                 <div><strong>GPS Fix:</strong> ${result.gps_coords}</div>
@@ -1093,7 +1391,7 @@ def serve_portal():
                         tbody.innerHTML = '';
 
                         if(data.logs.length === 0) {
-                            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No forensic records available in vault.</td></tr>`;
+                            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--cool-slate);">No forensic records available in vault.</td></tr>`;
                             return;
                         }
 
@@ -1102,7 +1400,7 @@ def serve_portal():
                             tbody.innerHTML += `
                                 <tr>
                                     <td>#${l.id}</td>
-                                    <td>${l.officer_id}<br><span style="font-size:11px; color:var(--text-muted);">${l.fingerprint_hash}</span></td>
+                                    <td>${l.officer_id}<br><span style="font-size:11px; color:var(--cool-slate);">${l.fingerprint_hash}</span></td>
                                     <td><span style="color:${l.classification==='POSITIVE'?'var(--danger)':'var(--emerald)'}; font-weight:700;">${l.classification}</span></td>
                                     <td>${l.hue_score}</td>
                                     <td>${l.gps_coords}</td>
