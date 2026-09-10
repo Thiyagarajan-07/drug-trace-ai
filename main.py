@@ -689,15 +689,49 @@ def serve_portal():
                 line-height: 1.7;
             }
 
-            /* Smart India Hackathon dual reference cards */
-            .dual-reference-grid {
-                max-width: 1280px;
-                width: 100%;
+            /* Smart India Hackathon unified dual reference card */
+            .dual-reference-shell {
+                max-width: 1340px;
+                width: calc(100% - 32px);
                 margin: 66px auto 0;
+                padding: 18px 0 0;
+                border: 1px solid rgba(148, 163, 184, 0.16);
+                border-radius: 28px;
+                background: linear-gradient(145deg, rgba(15, 23, 42, 0.72), rgba(8, 15, 30, 0.54));
+                box-shadow: 0 24px 70px rgba(2, 8, 23, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            }
+
+            .dual-reference-heading {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 18px;
+                padding: 0 28px 16px;
+            }
+
+            .dual-reference-heading h2 {
+                margin: 0;
+                color: #fff;
+                font-size: 14px;
+                letter-spacing: 2.2px;
+                text-transform: uppercase;
+            }
+
+            .dual-reference-heading p {
+                margin: 0;
+                color: var(--cool-slate);
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 10px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+
+            .dual-reference-grid {
+                width: 100%;
                 display: grid;
                 grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 28px;
-                padding: 0 24px;
+                padding: 0 18px 18px;
                 text-align: left;
             }
 
@@ -819,10 +853,20 @@ def serve_portal():
             }
 
             @media (max-width: 760px) {
+                .dual-reference-shell {
+                    width: calc(100% - 20px);
+                    margin-top: 48px;
+                }
+
+                .dual-reference-heading {
+                    align-items: flex-start;
+                    flex-direction: column;
+                    padding: 0 22px 14px;
+                }
+
                 .dual-reference-grid {
                     grid-template-columns: 1fr;
-                    margin-top: 48px;
-                    padding: 0 16px;
+                    padding: 0 12px 12px;
                 }
 
                 .ref-card {
@@ -1060,8 +1104,13 @@ def serve_portal():
                 </div>
             </div>
 
-                        <!-- SMART INDIA HACKATHON 231: DUAL REFERENCE CARDS -->
-            <div class="dual-reference-grid" aria-label="Smart India Hackathon problem-solution references">
+                        <!-- SMART INDIA HACKATHON 231: UNIFIED DUAL REFERENCE CARD -->
+            <section class="dual-reference-shell" aria-labelledby="dual-reference-title">
+                <div class="dual-reference-heading">
+                    <h2 id="dual-reference-title">SIH 231 · Dual Reference Card</h2>
+                    <p>Problem signal → field-ready solution</p>
+                </div>
+                <div class="dual-reference-grid" aria-label="Smart India Hackathon problem-solution references">
                 <article class="glass-panel ref-card">
                     <div class="reference-kicker">
                         <span>SIH 231 · Reference 01</span>
@@ -1093,7 +1142,8 @@ def serve_portal():
                         <span>Immutable audit records support chain-of-custody and judicial review.</span>
                     </div>
                 </article>
-            </div>
+                </div>
+            </section>
 
         </div>
 
